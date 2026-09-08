@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@娄底人 | 薪火长征路，青春娄底兵！邀你为新兵送上专属祝福</title>
+    <!-- 腾讯云开发SDK（配置环境ID后自动启用云端统一计数） -->
+    <script src="https://cdn.jsdelivr.net/npm/tcb-js-sdk@1.10.2/dist/tcb.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        body {
+            background: #f5f0e8;
+            color: #333;
+            min-height: 100vh;
+        }
+        /* 顶部横幅 */
+        .banner {
+            width: 100%;
+            display: block;
+            position: relative;
+        }
+        .banner img {
+            width: 100%;
+            display: block;
+        }
+        /* ====== 祝福弹幕区 ====== */
+        .danmaku-area {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(180deg, #8b0000 0%, #c81623 50%, #e63946 100%);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid #ffd700;
+        }
+        .danmaku-area::before {
+            content: "💌 祝福弹幕";
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            color: #ffd700;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 10;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .danmaku-item {
+            position: absolute;
+            white-space: nowrap;
+            color: #fff;
+            font-size: 14px;
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            border: 1px solid rgba(255,215,0,0.4);
+            animation: danmakuMove linear forwards;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .danmaku-item.mine {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #8b0000;
+            font-weight: bold;
+            border: 2px solid #fff;
+            box-shadow: 0 0 12px rgba(255,215,0,0.8);
+            z-index: 5;
+        }
+        @keyframes danmakuMove {
+            from { transform: translateX(100vw); }
+            to { transform: translateX(-100%); }
+        }
+        /* 主体容器 */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+        /* ============================================================
+           活动文案区 —— 美化版
+           ============================================================ */
+        .intro-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 0;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(200,22,35,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        /* 卡片顶部红色装饰条 */
+        .intro-card::before {
+            content: "";
+            display: block;
+            height: 6px;
+            background: linear-gradient(90deg, #8b0000, #c81623, #ffd700, #c81623, #8b0000);
+        }
+        .intro-inner {
+            padding: 28px 24px 30px;
+        }
+        /* 正文段落通用 */
+        .intro-inner p {
+            margin-bottom: 14px;
+            line-height: 2;
+            font-size: 15px;
+            color: #444;
+            text-align: justify;
+        }
+        /* 首段首字下沉 */
+        .intro-inner .first-paragraph::first-letter {
+            float: left;
+            font-size: 42px;
+            font-weight: bold;
+            color: #c81623;
+            line-height: 1;
+            margin: 4px 8px 0 0;
+            font-family: "SimSun", serif;
+        }
+        /* 活动主标题：两侧装饰线 */
+        .activity-title {
+            text-align: center;
+            margin: 24px 0 8px;
+            position: relative;
+        }
+        .activity-title .title-text {
+            display: inline-block;
+            font-size: 22px;
+            font-weight: bold;
+            color: #c81623;
+            letter-spacing: 2px;
+            padding: 0 20px;
+            position: relative;
+            background: #fff;
+            z-index: 2;
+        }
+        .activity-title::before,
+        .activity-title::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c81623);
+        }
+        .activity-title::before {
+            left: calc(50% - 130px);
+        }
+        .activity-title::after {
+            right: calc(50% - 130px);
+            background: linear-gradient(90deg, #c81623, transparent);
+        }
+        .activity-title .star {
+            color: #ffd700;
+            margin: 0 6px;
+            font-size: 18px;
+        }
+        /* 活动副标题：徽章样式 */
+        .activity-badge {
+            text-align: center;
+            margin: 12px 0 24px;
+        }
+        .activity-badge span {
+            display: inline-block;
+            padding: 8px 28px;
+            background: linear-gradient(135deg, #c81623, #e63946);
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 30px;
+            letter-spacing: 3px;
+            box-shadow: 0 3px 10px rgba(200,22,35,0.3);
+            position: relative;
+        }
+        .activity-badge span::before,
+        .activity-badge span::after {
+            content: "★";
+            color: #ffd700;
+            margin: 0 8px;
+            font-size: 12px;
+        }
+        /* 引导条：请选择一条祝福语 */
+        .guide-bar {
+            margin: 24px 0;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+            border-left: 4px solid #c81623;
+            border-radius: 0 10px 10px 0;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #c81623;
+            letter-spacing: 1px;
+        }
+        .guide-bar .arrow {
+            animation: bounce 1.5s infinite;
+            display: inline-block;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(4px); }
+        }
+        /* 引用块：每一次点击... */
+        .quote-block {
+            margin: 20px 0;
+            padding: 18px 20px;
+            background: linear-gradient(135deg, #fdf6f0, #fef0f0);
+            border-radius: 10px;
+            border: 1px solid #f5d5d5;
+            position: relative;
+        }
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            font-size: 48px;
+            color: #c81623;
+            font-family: Georgia, serif;
+            line-height: 1;
+            opacity: 0.4;
+        }
+        .quote-block p {
+            margin-bottom: 8px;
+            color: #8b3a3a;
+            font-size: 14.5px;
+            line-height: 1.9;
+            text-align: center;
+            text-indent: 0;
+        }
+        .quote-block p:last-child {
+            margin-bottom: 0;
+        }
+        /* 结尾寄语 */
+        .closing-words {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #fff8e1, #fff3e0);
+            border-radius: 10px;
+            border: 1px dashed #ffb74d;
+        }
+        .closing-words p {
+            color: #8b5a00;
+            font-size: 14.5px;
+            text-align: center;
+            text-indent: 0;
+            margin-bottom: 8px;
+        }
+        .closing-words p:last-child {
+            margin-bottom: 0;
+            font-weight: bold;
+            color: #c81623;
+        }
+        /* 分隔装饰线 */
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #c81623;
+            font-size: 14px;
+            letter-spacing: 4px;
+        }
+        .divider::before,
+        .divider::after {
+            content: "────";
+            margin: 0 10px;
+            color: #e0c0c0;
+        }
+        /* ============================================================
+           祝福选择区
+           ============================================================ */
+        .bless-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 4px 20px rgba(200,22,35,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        .bless-card::before {
+            content: "";
+            display: block;
+            height: 6px;
+            background: linear-gradient(90deg, #8b0000, #c81623, #ffd700, #c81623, #8b0000);
+            margin: -28px -24px 24px;
+        }
+        .bless-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c81623;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+        .bless-subtitle {
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .bless-list {
+            margin-bottom: 20px;
+        }
+        .bless-item {
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 15px;
+            line-height: 1.6;
+            position: relative;
+            background: #fafafa;
+        }
+        .bless-item:hover {
+            border-color: #c81623;
+            background: #fff5f5;
+            transform: translateX(4px);
+        }
+        .bless-item.active {
+            background: linear-gradient(135deg, #c81623, #e63946);
+            color: #fff;
+            border-color: #c81623;
+            box-shadow: 0 4px 12px rgba(200,22,35,0.3);
+        }
+        .bless-item .num {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #666;
+            font-size: 12px;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        .bless-item.active .num {
+            background: rgba(255,255,255,0.3);
+            color: #fff;
+        }
+        .send-btn {
+            width: 100%;
+            height: 54px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #c81623, #e63946);
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 12px rgba(200,22,35,0.3);
+            letter-spacing: 4px;
+        }
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(200,22,35,0.4);
+        }
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .result-box {
+            margin-top: 24px;
+            padding: 24px 20px;
+            background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+            border: 2px solid #c81623;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .result-box .check-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        .result-box .result-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c81623;
+            margin-bottom: 12px;
+        }
+        .result-box .result-count {
+            font-size: 28px;
+            font-weight: bold;
+            color: #c81623;
+            margin: 12px 0;
+        }
+        .result-box .result-count span {
+            font-size: 36px;
+        }
+        .result-box .result-bless {
+            font-size: 15px;
+            color: #666;
+            margin-top: 12px;
+            line-height: 1.6;
+            padding: 10px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            line-height: 1.8;
+        }
+        .mode-tip {
+            margin-top: 16px;
+            padding: 10px;
+            background: #fff8e1;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #f57c00;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部横幅 -->
+    <div class="banner">
+        <img src="https://aka.doubaocdn.com/s/hylCWLOMi0" alt="薪火长征路·青春娄底兵">
+    </div>
+
+    <!-- 祝福弹幕区 -->
+    <div class="danmaku-area" id="danmakuArea"></div>
+
+    <div class="container">
+        <!-- ====== 活动文案（美化版） ====== -->
+        <div class="intro-card">
+            <div class="intro-inner">
+                <p class="first-paragraph">又是一年送兵季，梅山叠翠，资水奔流。</p>
+                <p>一批批娄底青年身着戎装、胸戴红花，从湘中大地整装出发，传承长征精神的红色薪火，奔赴绿色军营，踏上保家卫国的崭新征程。</p>
+                <p>长征精神穿越时空，始终激励着娄底儿女奋勇向前。从革命年代的浴血奋战，到和平时期的戍边卫国，红色基因早已融入这座城市的血脉，一代代娄底青年接续投身军营，用青春践行"强国有我"的铮铮誓言。</p>
+                <p>为传递家乡人民的殷切期盼，致敬奔赴军营的热血青年，我们正式发起</p>
+
+                <!-- 活动主标题：两侧装饰线+星星 -->
+                <div class="activity-title">
+                    <span class="title-text">
+                        <span class="star">★</span>
+                        薪火长征路，青春娄底兵
+                        <span class="star">★</span>
+                    </span>
+                </div>
+
+                <!-- 活动副标题：徽章样式 -->
+                <div class="activity-badge">
+                    <span>线上送祝福接力活动</span>
+                </div>
+
+                <!-- 引导条 -->
+                <div class="guide-bar">
+                    <span class="arrow">👇</span> 请选择一条祝福语，为新兵送上家乡的牵挂 <span class="arrow">👇</span>
+                </div>
+
+                <!-- 引用块：每一次点击... -->
+                <div class="quote-block">
+                    <p>每一次点击，都是一份来自家乡的牵挂</p>
+                    <p>每一句祝福，都是一股砥砺前行的力量</p>
+                    <p>让我们以线上接力的方式，为新兵们加油鼓劲</p>
+                </div>
+
+                <div class="divider">❖</div>
+
+                <p>薪火相传，征途万里。从湘中腹地到万里边疆，从英雄热土到强军一线，娄底青年的青春始终与家国同频。</p>
+
+                <!-- 结尾寄语 -->
+                <div class="closing-words">
+                    <p>愿所有新兵带着家乡的祝福</p>
+                    <p>传承长征精神，勇担强军使命</p>
+                    <p>以奋斗之姿奔赴山海，以青春之我守护盛世中华</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== 祝福选择区 ====== -->
+        <div class="bless-card">
+            <div class="bless-title">🎯 选择一条祝福语送出</div>
+            <div class="bless-subtitle">（点击选择即可，无需手动编辑，送出后会在上方弹幕区滚动展示）</div>
+
+            <div class="bless-list" id="blessList"></div>
+
+            <button class="send-btn" id="sendBtn">送 出 祝 福</button>
+
+            <div class="mode-tip" id="modeTip">
+                ⚠ 当前为演示模式（计数仅保存在您的手机），配置云端数据库后可实现全网统一计数
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <div class="check-icon">🎉</div>
+                <div class="result-title">感谢您送出祝福！</div>
+                <div class="result-count">您是第 <span id="countNum">0</span> 位<br>送上祝福的群众</div>
+                <div class="result-bless" id="resultBless"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            主办单位：娄底市人民政府 娄底军分区<br>
+            承办单位：娄底市人民政府征兵办公室<br>
+            湘中国防 出品
+        </div>
+    </div>
+
+<script>
+    // ============================================================
+    // 【配置区】如果需要全网统一计数，填入腾讯云TCB环境ID
+    // 不填则自动使用演示模式（每个人手机独立计数）
+    // ============================================================
+    const TCB_ENV_ID = "";  // 例如："bless-xxxxxx"
+    // ============================================================
+
+    // 20条预制祝福语
+    const BLESS_WORDS = [
+        "承长征薪火，携梅山志气，祝娄底新兵军涯荣光",
+        "资水畔启程，长征路向前，愿你戎装报国、前程似锦",
+        "湘中儿女多壮志，长征接力看娄底新兵",
+        "薪火传长征，青春赴军营，为娄底子弟点赞",
+        "踏长征足迹，守万里山河，娄底好儿郎军营绽锋芒",
+        "梅山铸风骨，戎装赴征程，愿你不负韶华、建功军营",
+        "从湘中出发，向强军前行，传承长征精神",
+        "薪火长征路，热血娄底兵，愿你征途满载荣光",
+        "资水送儿郎，长征精神扬，祝参军光荣、一路顺遂",
+        "青春著戎装，薪火续长征，娄底儿女，强国有我",
+        "梅山儿女从军行，长征精神照前程",
+        "从娄底出发，沿长征足迹，以青春护盛世中华",
+        "赓续长征红色血脉，娄底新兵砺剑军营再立新功",
+        "怀揣湘中热土期盼，身披戎装奔赴强军战场",
+        "长征薪火代代传，娄底健儿勇毅向军营",
+        "青春献国防，赤心报家国，致敬娄底入伍新兵",
+        "资水育英才，军营展雄才，愿娄底新兵百炼成钢",
+        "传承红色长征魂，娄底少年砺志守山河",
+        "携家乡殷切嘱托，在军营书写无悔青春",
+        "戎装映初心，薪火启新程，祝娄底新兵再攀高峰"
+    ];
+
+    let selectedBless = "";
+    let db = null;
+    let useCloud = false;
+
+    window.onload = function() {
+        renderBlessList();
+        initTCB();
+        bindEvents();
+        startDanmaku();
+    };
+
+    // ========== 弹幕 ==========
+    function startDanmaku() {
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => {
+                createDanmaku(BLESS_WORDS[Math.floor(Math.random() * BLESS_WORDS.length)]);
+            }, i * 800);
+        }
+        setInterval(() => {
+            createDanmaku(BLESS_WORDS[Math.floor(Math.random() * BLESS_WORDS.length)]);
+        }, 1500);
+    }
+
+    function createDanmaku(text, isMine = false) {
+        const area = document.getElementById("danmakuArea");
+        const item = document.createElement("div");
+        item.className = "danmaku-item" + (isMine ? " mine" : "");
+        item.textContent = (isMine ? "🌟 " : "") + text;
+        const top = 25 + Math.random() * 70;
+        item.style.top = top + "px";
+        const duration = 8 + Math.random() * 7;
+        item.style.animationDuration = duration + "s";
+        area.appendChild(item);
+        setTimeout(() => {
+            if (item.parentNode) item.parentNode.removeChild(item);
+        }, duration * 1000 + 500);
+    }
+
+    // ========== 渲染祝福语列表 ==========
+    function renderBlessList() {
+        const list = document.getElementById("blessList");
+        list.innerHTML = BLESS_WORDS.map((word, index) => `
+            <div class="bless-item" data-index="${index}">
+                <span class="num">${index + 1}</span>${word}
+            </div>
+        `).join("");
+    }
+
+    // ========== 腾讯云初始化 ==========
+    function initTCB() {
+        if (TCB_ENV_ID && TCB_ENV_ID.trim() !== "") {
+            try {
+                const app = tcb.init({ env: TCB_ENV_ID });
+                db = app.database();
+                useCloud = true;
+            } catch (e) {
+                document.getElementById("modeTip").style.display = "block";
+            }
+        } else {
+            document.getElementById("modeTip").style.display = "block";
+        }
+    }
+
+    // ========== 事件绑定 ==========
+    function bindEvents() {
+        document.querySelectorAll(".bless-item").forEach(item => {
+            item.onclick = function() {
+                document.querySelectorAll(".bless-item").forEach(i => i.classList.remove("active"));
+                this.classList.add("active");
+                selectedBless = BLESS_WORDS[parseInt(this.dataset.index)];
+            };
+        });
+
+        document.getElementById("sendBtn").onclick = async function() {
+            if (!selectedBless) {
+                alert("请先选择一条祝福语！");
+                return;
+            }
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = "提交中...";
+
+            try {
+                let count;
+                if (useCloud && db) {
+                    await db.collection("bless_record").add({
+                        content: selectedBless,
+                        createTime: new Date()
+                    });
+                    const res = await db.collection("bless_record").count();
+                    count = res.total;
+                } else {
+                    count = parseInt(localStorage.getItem("blessCount") || "0") + 1;
+                    localStorage.setItem("blessCount", count);
+                }
+
+                document.getElementById("countNum").textContent = count;
+                document.getElementById("resultBless").textContent = "「" + selectedBless + "」";
+                document.getElementById("resultBox").style.display = "block";
+
+                // 用户送的祝福飘上弹幕
+                createDanmaku(selectedBless, true);
+
+                document.getElementById("resultBox").scrollIntoView({ behavior: "smooth", block: "center" });
+            } catch (e) {
+                alert("提交失败，请稍后重试！");
+                console.error(e);
+            }
+
+            btn.disabled = false;
+            btn.textContent = "送 出 祝 福";
+        };
+    }
+</script>
+</body>
+</html>
